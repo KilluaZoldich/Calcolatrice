@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatrice di Stipendio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calcolatrice di Stipendio</h1>
+    
+    <!-- Parte superiore con i parametri -->
+    <div class="controls">
+        <label>Stipendio base (€ per ora): <input type="number" id="stipendioBase" value="8.61"></label><br>
+        <label>Indennità di guida (al giorno): <input type="number" id="indennitaGuida" value="2.38"></label><br>
+        <label>Extra mensa: <input type="number" id="extraMensa" value="5"></label><br>
+        <label>FF: <input type="number" id="ff" value="15"></label><br>
+        <label>FF Cena: <input type="number" id="ffCena" value="17"></label><br>
+        <label>Reperibilità Feriale: <input type="number" id="reperibilitaFeriale" value="14"></label><br>
+        <label>Reperibilità Sabato: <input type="number" id="reperibilitaSabato" value="20"></label><br>
+        <label>Reperibilità Festivo: <input type="number" id="reperibilitaFestivo" value="26"></label><br>
+    </div>
+
+    <!-- Parte inferiore con selezioni giornaliere -->
+    <table>
+        <thead>
+            <tr>
+                <th>Giorno</th>
+                <th>Presenza</th>
+                <th>Guida</th>
+                <th>Extra Mensa/FF</th>
+                <th>Reperibilità</th>
+                <th>FF Cena</th>
+                <th>Straordinari Diurni (ore)</th>
+                <th>Straordinari Notturni (ore)</th>
+                <th>Straordinari Festivi (ore)</th>
+            </tr>
+        </thead>
+        <tbody id="giorniTable">
+            <!-- Qui verranno generati i giorni -->
+        </tbody>
+    </table>
+
+    <button onclick="calcola()">Calcola Stipendio</button>
+    <p id="risultato"></p>
+
+    <script src="app.js"></script>
+</body>
+</html>
