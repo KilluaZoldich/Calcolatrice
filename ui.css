@@ -1,3 +1,4 @@
+/* Stili generali (per desktop) */
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #f4f4f9;
@@ -55,6 +56,7 @@ th, td {
     border-bottom: 1px solid #ddd;
 }
 
+/* Stile per le schede (tabs) settimanali */
 .tabs {
     display: flex;
     border-bottom: 2px solid #2a9d8f;
@@ -77,4 +79,67 @@ th, td {
 
 .tabs button.active {
     border-bottom: 3px solid #2a9d8f;
+}
+
+/* ----- Versione Mobile ----- */
+/* Media query per schermi più piccoli di 768px (tablet e telefoni) */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .controls {
+        flex-direction: column; /* Riorganizza in colonna */
+        margin-bottom: 15px;
+    }
+
+    .controls label {
+        width: 100%; /* Ogni etichetta prende tutto lo spazio disponibile */
+        margin: 5px 0;
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    table, th, td {
+        font-size: 0.9rem; /* Riduci leggermente il testo nelle tabelle */
+    }
+}
+
+/* Media query per schermi più piccoli di 480px (telefoni) */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .controls {
+        flex-direction: column; /* Riorganizza in colonna */
+        margin-bottom: 10px;
+    }
+
+    .controls label {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    table, th, td {
+        font-size: 0.8rem;
+        padding: 8px;
+    }
+
+    /* Riduci il padding generale */
+    .table-container {
+        padding: 10px;
+    }
 }
