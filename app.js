@@ -1,65 +1,110 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const giorniTable = document.getElementById('giorniTable');
+    const settimana1 = document.getElementById('giorniTableSettimana1');
+    const settimana2 = document.getElementById('giorniTableSettimana2');
+    const settimana3 = document.getElementById('giorniTableSettimana3');
+    const settimana4 = document.getElementById('giorniTableSettimana4');
 
-    // Crea righe per ciascun giorno del mese
     for (let i = 1; i <= 30; i++) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${i}</td>
-            <td><input type="checkbox" class="presenza"></td>
-            <td><input type="checkbox" class="guida"></td>
+            <td><input type="checkbox" class="presenza" data-giorno="${i}"></td>
+            <td><input type="checkbox" class="guida" data-giorno="${i}"></td>
             <td>
-                <select class="extraMensaFF">
+                <select class="extraMensaFF" data-giorno="${i}">
                     <option value="0">Nessuno</option>
                     <option value="extraMensa">Extra Mensa</option>
                     <option value="ff">FF</option>
                 </select>
             </td>
             <td>
-                <select class="reperibilita">
+                <select class="reperibilita" data-giorno="${i}">
                     <option value="0">Nessuna</option>
                     <option value="feriale">Feriale</option>
                     <option value="sabato">Sabato</option>
                     <option value="festivo">Festivo</option>
                 </select>
             </td>
-            <td><input type="checkbox" class="ffCena"></td>
-            <td><input type="number" class="straordinarioDiurno" value="0" min="0"></td>
-            <td><input type="number" class="straordinarioNotturno" value="0" min="0"></td>
-            <td><input type="number" class="straordinarioFestivo" value="0" min="0"></td>
+            <td><input type="checkbox" class="ffCena" data-giorno="${i}"></td>
+            <td><input type="number" class="straordinarioDiurno" value="0" min="0" data-giorno="${i}"></td>
+            <td><input type="number" class="straordinarioNotturno" value="0" min="0" data-giorno="${i}"></td>
+            <td><input type="number" class="straordinarioFestivo" value="0" min="0" data-giorno="${i}"></td>
         `;
-        giorniTable.appendChild(row);
+
+        if (i <= 7) settimana1.appendChild(row);
+        else if (i <= 14) settimana2.appendChild(row);
+        else if (i <= 21) settimana3.appendChild(row);
+        else settimana4.appendChild(row);
     }
 
-    // Funzione di calcolo
+    // Funzione per salvare i dati nel localStorage
+    function salvaDati() {
+        const dati = [];
+        document.querySelectorAll('tbody tr').forEach((row) => {
+            const giorno = {};
+            giorno.presenza = row.querySelector('.presenza').checked;
+            giorno.guida = row.querySelector('.guida').checked;
+            giorno.extraMensaFF = row.querySelector('.extraMensaFF').value;
+            giorno.reperibilita = row.querySelector('.reperibilita').value;
+            giorno.ffCena = row.querySelector('.ffCena').checked;
+            giorno.straordinarioDiurno = row.querySelector('.straordinarioDiurno').value;
+            giorno.straordinarioNotturno = row.querySelector('.straordinarioNotturno').value;
+            giorno.straordinarioFestivo = row.querySelector('.straordinarioFestivo').value;
+
+            dati.push(giorno);
+        });
+        localStorage.setItem('datiGiorni', JSON.stringify(dati));
+    }
+
+    // Carica i dati dal localStorage
+    function caricaDati() {
+        const datiSalvati = JSON.parse(localStorage.getItem('datiGiorni'));
+        if (datiSalvati) {
+            document.querySelectorAll('tbody tr').forEach((row, index) => {
+                if (datiSalvati[index]) {
+                    row.querySelector('.presenza').checked = datiSalvati[index].presenza;
+                    row.querySelector('.guida').checked = datiSalvati[index].guida;
+                    row.querySelector('.extraMensaFF').value = datiSalvati[index].extraMensaFF;
+                    row.querySelector('.reperibilita').value = datiSalvati[index].reperibilita;
+                    row.querySelector('.ffCena').checked = datiSalvati[index].ffCena;
+                    row.querySelector('.straordinarioDiurno').value = datiSalvati[index].straordinarioDiurno;
+                    row.querySelector('.straordinarioNotturno').value = datiSalvati[index].straordinarioNotturno;
+                    row.querySelector('.straordinarioFestivo').value = datiSalvati[index].straordinarioFestivo;
+                }
+            });
+        }
+    }
+
+    // Funzione di calcolo del totale
     window.calcola = function() {
         let totale = 0;
-        const stipendioBase = parseFloat(document.getElementById('stipendioBase').value);
-        const indennitaGuida = parseFloat(document.getElementById('indennitaGuida').value);
-        const extraMensaVal = parseFloat(document.getElementById('extraMensa').value);
-        const ffVal = parseFloat(document.getElementById('ff').value);
-        const ffCenaVal = parseFloat(document.getElementById('ffCena').value);
-        const reperibilitaFerialeVal = parseFloat(document.getElementById('reperibilitaFeriale').value);
-        const reperibilitaSabatoVal = parseFloat(document.getElementById('reperibilitaSabato').value);
-        const reperibilitaFestivoVal = parseFloat(document.getElementById('reperibilitaFestivo').value);
+        const stipendioBase = parseFloat(document.getElementById('stipendioBase').value) || 0;
+        const indennitaGuida = parseFloat(document.getElementById('indennitaGuida').value) || 0;
+        const extraMensaVal = parseFloat(document.getElementById('extraMensa').value) || 0;
+        const ffVal = parseFloat(document.getElementById('ff').value) || 0;
+        const ffCenaVal = parseFloat(document.getElementById('ffCena').value) || 0;
+        const reperibilitaFerialeVal = parseFloat(document.getElementById('reperibilitaFeriale').value) || 0;
+        const reperibilitaSabatoVal = parseFloat(document.getElementById('reperibilitaSabato').value) || 0;
+        const reperibilitaFestivoVal = parseFloat(document.getElementById('reperibilitaFestivo').value) || 0;
 
-        document.querySelectorAll('#giorniTable tr').forEach((row, index) => {
+        document.querySelectorAll('tbody tr').forEach((row) => {
             const presenza = row.querySelector('.presenza').checked;
             const guida = row.querySelector('.guida').checked;
             const extraMensaFF = row.querySelector('.extraMensaFF').value;
             const reperibilita = row.querySelector('.reperibilita').value;
             const ffCena = row.querySelector('.ffCena').checked;
-            const straordinarioDiurno = parseFloat(row.querySelector('.straordinarioDiurno').value);
-            const straordinarioNotturno = parseFloat(row.querySelector('.straordinarioNotturno').value);
-            const straordinarioFestivo = parseFloat(row.querySelector('.straordinarioFestivo').value);
+            const straordinarioDiurno = parseFloat(row.querySelector('.straordinarioDiurno').value) || 0;
+            const straordinarioNotturno = parseFloat(row.querySelector('.straordinarioNotturno').value) || 0;
+            const straordinarioFestivo = parseFloat(row.querySelector('.straordinarioFestivo').value) || 0;
 
-            if (presenza) totale += stipendioBase * 8; // Calcolo base per 8 ore di lavoro
+            // Esegui i calcoli solo se la presenza è flaggata
+            if (presenza) totale += stipendioBase * 8;
             if (guida) totale += indennitaGuida;
             if (extraMensaFF === 'extraMensa') totale += extraMensaVal;
             if (extraMensaFF === 'ff') totale += ffVal;
             if (ffCena) totale += ffCenaVal;
 
-            // Calcola reperibilità
+            // Calcola la reperibilità
             if (reperibilita === 'feriale') totale += reperibilitaFerialeVal;
             else if (reperibilita === 'sabato') totale += reperibilitaSabatoVal;
             else if (reperibilita === 'festivo') totale += reperibilitaFestivoVal;
@@ -70,70 +115,14 @@ document.addEventListener('DOMContentLoaded', () => {
             totale += straordinarioFestivo * stipendioBase * 1.4;
         });
 
+        // Mostra il risultato
         document.getElementById('risultato').innerText = `Totale Stipendio: €${totale.toFixed(2)}`;
-        salvaDati(); // Salva i dati ogni volta che si calcola
     };
 
-    // Funzione per salvare i dati nel localStorage
-    function salvaDati() {
-        const parametri = {
-            stipendioBase: document.getElementById('stipendioBase').value,
-            indennitaGuida: document.getElementById('indennitaGuida').value,
-            extraMensa: document.getElementById('extraMensa').value,
-            ff: document.getElementById('ff').value,
-            ffCena: document.getElementById('ffCena').value,
-            reperibilitaFeriale: document.getElementById('reperibilitaFeriale').value,
-            reperibilitaSabato: document.getElementById('reperibilitaSabato').value,
-            reperibilitaFestivo: document.getElementById('reperibilitaFestivo').value,
-            giorni: []
-        };
+    // Salva i dati ogni volta che c'è un cambiamento
+    document.querySelectorAll('input, select').forEach(element => {
+        element.addEventListener('change', salvaDati);
+    });
 
-        // Salva i dati giornalieri
-        document.querySelectorAll('#giorniTable tr').forEach((row, index) => {
-            const giorno = {
-                presenza: row.querySelector('.presenza').checked,
-                guida: row.querySelector('.guida').checked,
-                extraMensaFF: row.querySelector('.extraMensaFF').value,
-                reperibilita: row.querySelector('.reperibilita').value,
-                ffCena: row.querySelector('.ffCena').checked,
-                straordinarioDiurno: row.querySelector('.straordinarioDiurno').value,
-                straordinarioNotturno: row.querySelector('.straordinarioNotturno').value,
-                straordinarioFestivo: row.querySelector('.straordinarioFestivo').value
-            };
-            parametri.giorni.push(giorno);
-        });
-
-        localStorage.setItem('parametri', JSON.stringify(parametri));
-    }
-
-    // Funzione per caricare i dati salvati dal localStorage
-    function caricaDati() {
-        const parametri = JSON.parse(localStorage.getItem('parametri'));
-        if (parametri) {
-            document.getElementById('stipendioBase').value = parametri.stipendioBase;
-            document.getElementById('indennitaGuida').value = parametri.indennitaGuida;
-            document.getElementById('extraMensa').value = parametri.extraMensa;
-            document.getElementById('ff').value = parametri.ff;
-            document.getElementById('ffCena').value = parametri.ffCena;
-            document.getElementById('reperibilitaFeriale').value = parametri.reperibilitaFeriale;
-            document.getElementById('reperibilitaSabato').value = parametri.reperibilitaSabato;
-            document.getElementById('reperibilitaFestivo').value = parametri.reperibilitaFestivo;
-
-            // Carica i dati giornalieri
-            document.querySelectorAll('#giorniTable tr').forEach((row, index) => {
-                if (parametri.giorni[index]) {
-                    row.querySelector('.presenza').checked = parametri.giorni[index].presenza;
-                    row.querySelector('.guida').checked = parametri.giorni[index].guida;
-                    row.querySelector('.extraMensaFF').value = parametri.giorni[index].extraMensaFF;
-                    row.querySelector('.reperibilita').value = parametri.giorni[index].reperibilita;
-                    row.querySelector('.ffCena').checked = parametri.giorni[index].ffCena;
-                    row.querySelector('.straordinarioDiurno').value = parametri.giorni[index].straordinarioDiurno;
-                    row.querySelector('.straordinarioNotturno').value = parametri.giorni[index].straordinarioNotturno;
-                    row.querySelector('.straordinarioFestivo').value = parametri.giorni[index].straordinarioFestivo;
-                }
-            });
-        }
-    }
-
-    caricaDati(); // Carica i dati all'avvio
+    caricaDati(); // Carica i dati salvati all'avvio
 });
