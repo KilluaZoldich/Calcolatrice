@@ -24,20 +24,39 @@
         }
     </style>
 </head>
+<link rel="stylesheet" href="ui.css">
+
+<!-- Pulsante per mostrare/nascondere i parametri principali -->
+<button id="toggleParametri">Mostra Parametri</button>
+
+<!-- Parametri principali nascosti inizialmente -->
+<div id="parametriPrincipali" style="display: none;">
+    <label>Stipendio base (€ per ora): <input type="number" id="stipendioBase" value="8.61"></label><br>
+    <label>Indennità di guida (al giorno): <input type="number" id="indennitaGuida" value="2.38"></label><br>
+    <label>Extra mensa: <input type="number" id="extraMensa" value="5"></label><br>
+    <label>FF: <input type="number" id="ff" value="15"></label><br>
+    <label>FF Cena: <input type="number" id="ffCena" value="17"></label><br>
+    <label>Reperibilità Feriale: <input type="number" id="reperibilitaFeriale" value="14"></label><br>
+    <label>Reperibilità Sabato: <input type="number" id="reperibilitaSabato" value="20"></label><br>
+    <label>Reperibilità Festivo: <input type="number" id="reperibilitaFestivo" value="26"></label><br>
+</div>
+
+<script>
+    document.getElementById('toggleParametri').addEventListener('click', function() {
+        const parametri = document.getElementById('parametriPrincipali');
+        if (parametri.style.display === 'none') {
+            parametri.style.display = 'block';
+            this.innerText = 'Nascondi Parametri';
+        } else {
+            parametri.style.display = 'none';
+            this.innerText = 'Mostra Parametri';
+        }
+    });
+</script>
+
 <body>
     <h1>Calcolatrice di Stipendio</h1>
     
-    <!-- Parte superiore con i parametri -->
-    <div class="controls">
-        <label>Stipendio base (€ per ora): <input type="number" id="stipendioBase" value="8.61"></label><br>
-        <label>Indennità di guida (al giorno): <input type="number" id="indennitaGuida" value="2.38"></label><br>
-        <label>Extra mensa: <input type="number" id="extraMensa" value="5"></label><br>
-        <label>FF: <input type="number" id="ff" value="15"></label><br>
-        <label>FF Cena: <input type="number" id="ffCena" value="17"></label><br>
-        <label>Reperibilità Feriale: <input type="number" id="reperibilitaFeriale" value="14"></label><br>
-        <label>Reperibilità Sabato: <input type="number" id="reperibilitaSabato" value="20"></label><br>
-        <label>Reperibilità Festivo: <input type="number" id="reperibilitaFestivo" value="26"></label><br>
-    </div>
 
     <!-- Parte inferiore con le sezioni settimanali -->
     <div>
