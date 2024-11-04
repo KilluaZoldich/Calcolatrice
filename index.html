@@ -68,9 +68,13 @@
         }
 
         .parametri-grid {
-            display: grid;
+            display: none;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1rem;
+        }
+
+        .parametri-grid.show {
+            display: grid;
         }
 
         .input-group {
@@ -141,7 +145,7 @@
         }
 
         .time-input input {
-            width: 60px;
+            width: 40px;
             padding: 0.25rem;
             border: 1px solid var(--border-color);
             border-radius: 0.25rem;
@@ -175,21 +179,6 @@
             margin-top: 1rem;
         }
 
-        @media (max-width: 768px) {
-            .parametri-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .week-table {
-                display: block;
-                overflow-x: auto;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-        }
-
         select {
             width: 100%;
             padding: 0.5rem;
@@ -209,6 +198,64 @@
             width: 1.2rem;
             height: 1.2rem;
         }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        /* Modifiche per il layout mobile */
+        @media (max-width: 768px) {
+            .parametri-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .week-table {
+                display: block;
+                overflow-x: auto;
+                width: 100%;
+            }
+
+            .calculate-btn {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+
+            .input-group label,
+            .card-header h2 {
+                font-size: 1rem;
+            }
+
+            .input-group input,
+            select {
+                font-size: 0.9rem;
+            }
+
+            .calculate-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .time-input label {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -220,8 +267,11 @@
         <div class="card">
             <div class="card-header">
                 <h2>Parametri Base</h2>
+                <button onclick="toggleParametri()" class="toggle-btn">
+                    <i class="fas fa-cog"></i>
+                </button>
             </div>
-            <div class="parametri-grid">
+            <div class="parametri-grid" id="parametriGrid">
                 <div class="input-group">
                     <label for="stipendioBase">Stipendio base (€/ora)</label>
                     <input type="number" id="stipendioBase" step="0.01" min="0">
@@ -343,11 +393,14 @@
                     <td>
                         <div class="time-input">
                             <label>D:</label>
-                            <input type="number" class="straordinarioDiurno" min="0" max="24" step="0.5" value="0" data-day="${dayIndex}">
+                            <input type="number" class="straordinarioDiurnoOre" min="0" max="23" value="0" data-day="${dayIndex}">
+                            <input type="number" class="straordinarioDiurnoMinuti" min="0" max="59" value="0" data-day="${dayIndex}">
                             <label>N:</label>
-                            <input type="number" class="straordinarioNotturno" min="0" max="24" step="0.5" value="0" data-day="${dayIndex}">
+                            <input type="number" class="straordinarioNotturnoOre" min="0" max="23" value="0" data-day="${dayIndex}">
+                            <input type="number" class="straordinarioNotturnoMinuti" min="0" max="59" value="0" data-day="${dayIndex}">
                             <label>F:</label>
-                            <input type="number" class="straordinarioFestivo" min="0" max="24" step="0.5" value="0" data-day="${dayIndex}">
+                            <input type="number" class="straordinarioFestivoOre" min="0" max="23" value="0" data-day="${dayIndex}">
+                            <input type="number" class="straordinarioFestivoMinuti" min="0" max="59" value="0" data-day="${dayIndex}">
                         </div>
                     </td>
                 `;
@@ -367,6 +420,7 @@
         document.getElementById('weekTabs').addEventListener('click', (e) => {
             if (e.target.classList.contains('tab')) {
                 // Rimuovi classe active da tutti i tab
+                
                 document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
                 // Aggiungi classe active al tab cliccato
                 e.target.classList.add('active');
@@ -378,6 +432,12 @@
                 document.getElementById(`week${weekNum}`).style.display = 'table';
             }
         });
+
+        // Funzione per mostrare/nascondere i parametri
+        function toggleParametri() {
+            const parametriGrid = document.getElementById('parametriGrid');
+            parametriGrid.classList.toggle('show');
+        }
 
         // Funzione per salvare i dati
         function salvaDati() {
@@ -403,9 +463,12 @@
                     extraFF: document.querySelector(`.extraFF[data-day="${i}"]`).value,
                     reperibilita: document.querySelector(`.reperibilita[data-day="${i}"]`).value,
                     ffCena: document.querySelector(`.ffCena[data-day="${i}"]`).checked,
-                    straordinarioDiurno: document.querySelector(`.straordinarioDiurno[data-day="${i}"]`).value,
-                    straordinarioNotturno: document.querySelector(`.straordinarioNotturno[data-day="${i}"]`).value,
-                    straordinarioFestivo: document.querySelector(`.straordinarioFestivo[data-day="${i}"]`).value
+                    straordinarioDiurnoOre: document.querySelector(`.straordinarioDiurnoOre[data-day="${i}"]`).value,
+                    straordinarioDiurnoMinuti: document.querySelector(`.straordinarioDiurnoMinuti[data-day="${i}"]`).value,
+                    straordinarioNotturnoOre: document.querySelector(`.straordinarioNotturnoOre[data-day="${i}"]`).value,
+                    straordinarioNotturnoMinuti: document.querySelector(`.straordinarioNotturnoMinuti[data-day="${i}"]`).value,
+                    straordinarioFestivoOre: document.querySelector(`.straordinarioFestivoOre[data-day="${i}"]`).value,
+                    straordinarioFestivoMinuti: document.querySelector(`.straordinarioFestivoMinuti[data-day="${i}"]`).value
                 };
                 dati.giorni.push(giorno);
             }
@@ -436,9 +499,12 @@
                     document.querySelector(`.extraFF[data-day="${index}"]`).value = giorno.extraFF;
                     document.querySelector(`.reperibilita[data-day="${index}"]`).value = giorno.reperibilita;
                     document.querySelector(`.ffCena[data-day="${index}"]`).checked = giorno.ffCena;
-                    document.querySelector(`.straordinarioDiurno[data-day="${index}"]`).value = giorno.straordinarioDiurno;
-                    document.querySelector(`.straordinarioNotturno[data-day="${index}"]`).value = giorno.straordinarioNotturno;
-                    document.querySelector(`.straordinarioFestivo[data-day="${index}"]`).value = giorno.straordinarioFestivo;
+                    document.querySelector(`.straordinarioDiurnoOre[data-day="${index}"]`).value = giorno.straordinarioDiurnoOre;
+                    document.querySelector(`.straordinarioDiurnoMinuti[data-day="${index}"]`).value = giorno.straordinarioDiurnoMinuti;
+                    document.querySelector(`.straordinarioNotturnoOre[data-day="${index}"]`).value = giorno.straordinarioNotturnoOre;
+                    document.querySelector(`.straordinarioNotturnoMinuti[data-day="${index}"]`).value = giorno.straordinarioNotturnoMinuti;
+                    document.querySelector(`.straordinarioFestivoOre[data-day="${index}"]`).value = giorno.straordinarioFestivoOre;
+                    document.querySelector(`.straordinarioFestivoMinuti[data-day="${index}"]`).value = giorno.straordinarioFestivoMinuti;
                 });
             }
         }
@@ -462,11 +528,14 @@
                 const extraFF = document.querySelector(`.extraFF[data-day="${i}"]`).value;
                 const reperibilita = document.querySelector(`.reperibilita[data-day="${i}"]`).value;
                 const ffCena = document.querySelector(`.ffCena[data-day="${i}"]`).checked;
-                const straordinarioDiurno = parseFloat(document.querySelector(`.straordinarioDiurno[data-day="${i}"]`).value) || 0;
-                const straordinarioNotturno = parseFloat(document.querySelector(`.straordinarioNotturno[data-day="${i}"]`).value) || 0;
-                const straordinarioFestivo = parseFloat(document.querySelector(`.straordinarioFestivo[data-day="${i}"]`).value) || 0;
+                const straordinarioDiurnoOre = parseInt(document.querySelector(`.straordinarioDiurnoOre[data-day="${i}"]`).value) || 0;
+                const straordinarioDiurnoMinuti = parseInt(document.querySelector(`.straordinarioDiurnoMinuti[data-day="${i}"]`).value) || 0;
+                const straordinarioNotturnoOre = parseInt(document.querySelector(`.straordinarioNotturnoOre[data-day="${i}"]`).value) || 0;
+                const straordinarioNotturnoMinuti = parseInt(document.querySelector(`.straordinarioNotturnoMinuti[data-day="${i}"]`).value) || 0;
+                const straordinarioFestivoOre = parseInt(document.querySelector(`.straordinarioFestivoOre[data-day="${i}"]`).value) || 0;
+                const straordinarioFestivoMinuti = parseInt(document.querySelector(`.straordinarioFestivoMinuti[data-day="${i}"]`).value) || 0;
 
-                if (presenza) totale += stipendioBase * 8; // Giornata lavorativa standard
+                if (presenza) totale += stipendioBase * 7.6; // Giornata lavorativa standard (7 ore e 36 minuti)
                 if (guida) totale += indennitaGuida;
                 if (extraFF === 'extraMensa') totale += extraMensaVal;
                 if (extraFF === 'ff') totale += ffVal;
@@ -486,6 +555,10 @@
                 }
 
                 // Calcola straordinari
+                const straordinarioDiurno = straordinarioDiurnoOre + (straordinarioDiurnoMinuti / 60);
+                const straordinarioNotturno = straordinarioNotturnoOre + (straordinarioNotturnoMinuti / 60);
+                const straordinarioFestivo = straordinarioFestivoOre + (straordinarioFestivoMinuti / 60);
+
                 totale += straordinarioDiurno * stipendioBase * 1.22;  // Maggiorazione 22%
                 totale += straordinarioNotturno * stipendioBase * 1.5; // Maggiorazione 50%
                 totale += straordinarioFestivo * stipendioBase * 1.4;  // Maggiorazione 40%
