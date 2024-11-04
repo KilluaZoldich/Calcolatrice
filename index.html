@@ -31,46 +31,46 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem;
+            padding: 0.5rem;
         }
 
         .header {
             text-align: center;
-            margin: 2rem 0;
+            margin: 1rem 0;
         }
 
         .header h1 {
             color: var(--primary-color);
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
         }
 
         .card {
             background: var(--card-background);
             border-radius: 0.5rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid var(--border-color);
         }
 
         .card-header h2 {
             color: var(--primary-color);
-            font-size: 1.25rem;
+            font-size: 1.2rem;
         }
 
         .parametri-grid {
             display: none;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
         }
 
         .parametri-grid.show {
@@ -78,37 +78,41 @@
         }
 
         .input-group {
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .input-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
             font-weight: 500;
+            font-size: 0.9rem;
         }
 
-        .input-group input {
+        .input-group input, select {
             width: 100%;
             padding: 0.5rem;
             border: 1px solid var(--border-color);
             border-radius: 0.25rem;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         .tabs {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
         }
 
         .tab {
-            padding: 0.5rem 1rem;
+            padding: 0.5rem;
             background: none;
             border: none;
             border-bottom: 2px solid transparent;
             cursor: pointer;
             font-weight: 500;
             color: var(--text-color);
+            font-size: 0.9rem;
         }
 
         .tab.active {
@@ -119,12 +123,13 @@
         .week-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
         }
 
         .week-table th,
         .week-table td {
-            padding: 0.75rem;
+            padding: 0.5rem;
             border: 1px solid var(--border-color);
             text-align: left;
         }
@@ -140,7 +145,8 @@
 
         .time-input {
             display: flex;
-            gap: 0.5rem;
+            flex-wrap: wrap;
+            gap: 0.25rem;
             align-items: center;
         }
 
@@ -149,19 +155,20 @@
             padding: 0.25rem;
             border: 1px solid var(--border-color);
             border-radius: 0.25rem;
+            font-size: 0.8rem;
         }
 
         .calculate-btn {
             display: block;
             width: 100%;
             max-width: 300px;
-            margin: 2rem auto;
-            padding: 1rem 2rem;
+            margin: 1rem auto;
+            padding: 0.75rem 1.5rem;
             background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 0.5rem;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
             transition: background-color 0.2s;
@@ -173,30 +180,21 @@
 
         .result {
             text-align: center;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: var(--primary-color);
             margin-top: 1rem;
         }
 
-        select {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.25rem;
-            font-size: 1rem;
-            background-color: white;
-        }
-
         .checkbox-wrapper {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.25rem;
         }
 
         .checkbox-wrapper input[type="checkbox"] {
-            width: 1.2rem;
-            height: 1.2rem;
+            width: 1rem;
+            height: 1rem;
         }
 
         .toggle-btn {
@@ -207,53 +205,44 @@
             color: var(--primary-color);
         }
 
-        /* Modifiche per il layout mobile */
         @media (max-width: 768px) {
-            .parametri-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
             .week-table {
-                display: block;
-                overflow-x: auto;
-                width: 100%;
+                font-size: 0.8rem;
             }
 
-            .calculate-btn {
-                width: 90%;
+            .week-table th,
+            .week-table td {
+                padding: 0.25rem;
+            }
+
+            .time-input {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .time-input input {
+                width: 100%;
+                margin-bottom: 0.25rem;
             }
         }
 
         @media (max-width: 480px) {
             .header h1 {
-                font-size: 1.75rem;
+                font-size: 1.5rem;
             }
 
-            .card {
-                padding: 1rem;
-            }
-
-            .input-group label,
             .card-header h2 {
                 font-size: 1rem;
             }
 
-            .input-group input,
-            select {
-                font-size: 0.9rem;
-            }
-
+            .input-group label,
+            .tab,
             .calculate-btn {
-                padding: 0.75rem 1.5rem;
-                font-size: 1rem;
+                font-size: 0.9rem;
             }
 
-            .time-input label {
-                font-size: 0.9rem;
+            .week-table {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -329,7 +318,7 @@
 
     <script>
         // Giorni della settimana
-        const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
+        const giorni = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 
         // Funzione per creare la tabella della settimana
         function creaTabellaSettimana(settimana) {
@@ -343,11 +332,11 @@
             thead.innerHTML = `
                 <tr>
                     <th>Giorno</th>
-                    <th>Presenza</th>
-                    <th>Guida</th>
-                    <th>Extra/FF</th>
-                    <th>Reperibilità</th>
-                    <th>FF Cena</th>
+                    <th>P</th>
+                    <th>G</th>
+                    <th>E/F</th>
+                    <th>R</th>
+                    <th>FC</th>
                     <th>Straordinari</th>
                 </tr>
             `;
@@ -372,17 +361,17 @@
                     </td>
                     <td>
                         <select class="extraFF" data-day="${dayIndex}">
-                            <option value="0">Nessuno</option>
-                            <option value="extraMensa">Extra Mensa</option>
+                            <option value="0">-</option>
+                            <option value="extraMensa">EM</option>
                             <option value="ff">FF</option>
                         </select>
                     </td>
                     <td>
                         <select class="reperibilita" data-day="${dayIndex}">
-                            <option value="0">Nessuna</option>
-                            <option value="feriale">Feriale</option>
-                            <option value="sabato">Sabato</option>
-                            <option value="festivo">Festivo</option>
+                            <option value="0">-</option>
+                            <option value="feriale">F</option>
+                            <option value="sabato">S</option>
+                            <option value="festivo">D</option>
                         </select>
                     </td>
                     <td>
@@ -392,20 +381,18 @@
                     </td>
                     <td>
                         <div class="time-input">
-                            <label>D:</label>
-                            <input type="number" class="straordinarioDiurnoOre" min="0" max="23" value="0" data-day="${dayIndex}">
-                            <input type="number" class="straordinarioDiurnoMinuti" min="0" max="59" value="0" data-day="${dayIndex}">
-                            <label>N:</label>
-                            <input type="number" class="straordinarioNotturnoOre" min="0" max="23" value="0" data-day="${dayIndex}">
-                            <input type="number" class="straordinarioNotturnoMinuti" min="0" max="59" value="0" data-day="${dayIndex}">
-                            <label>F:</label>
-                            <input type="number" class="straordinarioFestivoOre" min="0" max="23" value="0" data-day="${dayIndex}">
-                            <input type="number" class="straordinarioFestivoMinuti" min="0" max="59" value="0" data-day="${dayIndex}">
+                            <input type="number" class="straordinarioDiurnoOre" min="0" max="23" value="0" data-day="${dayIndex}" placeholder="D">
+                            <input type="number" class="straordinarioDiurnoMinuti" min="0" max="59" value="0" data-day="${dayIndex}" placeholder="m">
+                            <input type="number" class="straordinarioNotturnoOre" min="0" max="23" value="0" data-day="${dayIndex}" placeholder="N">
+                            <input type="number" class="straordinarioNotturnoMinuti" min="0" max="59" value="0" data-day="${dayIndex}" placeholder="m">
+                            <input type="number" class="straordinarioFestivoOre" min="0" max="23" value="0" data-day="${dayIndex}" placeholder="F">
+                            <input type="number" class="straordinarioFestivoMinuti" min="0" max="59" value="0" data-day="${dayIndex}" placeholder="m">
                         </div>
                     </td>
                 `;
                 tbody.appendChild(row);
             });
+            
             table.appendChild(tbody);
             return table;
         }
@@ -419,15 +406,9 @@
         // Gestione dei tab
         document.getElementById('weekTabs').addEventListener('click', (e) => {
             if (e.target.classList.contains('tab')) {
-                // Rimuovi classe active da tutti i tab
-                
                 document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-                // Aggiungi classe active al tab cliccato
                 e.target.classList.add('active');
-
-                // Nascondi tutte le tabelle
                 document.querySelectorAll('.week-table').forEach(table => table.style.display = 'none');
-                // Mostra la tabella selezionata
                 const weekNum = e.target.getAttribute('data-week');
                 document.getElementById(`week${weekNum}`).style.display = 'table';
             }
