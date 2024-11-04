@@ -4,567 +4,319 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calcolatrice Stipendio</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --background-color: #f1f5f9;
-            --card-background: #ffffff;
-            --text-color: #1e293b;
-            --border-color: #e2e8f0;
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.5s ease;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.5rem;
-        }
-
-        .header {
-            text-align: center;
-            margin: 1rem 0;
-        }
-
-        .header h1 {
-            color: var(--primary-color);
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .card {
-            background: var(--card-background);
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .card-header h2 {
-            color: var(--primary-color);
-            font-size: 1.2rem;
-        }
-
-        .parametri-grid {
-            display: none;
-            grid-template-columns: 1fr;
-            gap: 0.5rem;
-        }
-
-        .parametri-grid.show {
-            display: grid;
-        }
-
-        .input-group {
-            margin-bottom: 0.5rem;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.25rem;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .input-group input, select {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.25rem;
-            font-size: 0.9rem;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 0.25rem;
-            margin-bottom: 0.5rem;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-
-        .tab {
-            padding: 0.5rem;
-            background: none;
-            border: none;
-            border-bottom: 2px solid transparent;
-            cursor: pointer;
-            font-weight: 500;
-            color: var(--text-color);
-            font-size: 0.9rem;
-        }
-
-        .tab.active {
-            color: var(--primary-color);
-            border-bottom-color: var(--primary-color);
-        }
-
-        .week-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .week-table th,
-        .week-table td {
-            padding: 0.5rem;
-            border: 1px solid var(--border-color);
-            text-align: left;
-        }
-
-        .week-table th {
-            background-color: var(--background-color);
-            font-weight: 500;
-        }
-
-        .week-table td {
-            vertical-align: middle;
-        }
-
-        .time-input {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.25rem;
-            align-items: center;
-        }
-
-        .time-input input {
-            width: 40px;
-            padding: 0.25rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.25rem;
-            font-size: 0.8rem;
-        }
-
-        .calculate-btn {
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            margin: 1rem auto;
-            padding: 0.75rem 1.5rem;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .calculate-btn:hover {
-            background-color: var(--secondary-color);
-        }
-
-        .result {
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-top: 1rem;
-        }
-
-        .checkbox-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .checkbox-wrapper input[type="checkbox"] {
-            width: 1rem;
-            height: 1rem;
-        }
-
-        .toggle-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: var(--primary-color);
-        }
-
-        @media (max-width: 768px) {
-            .week-table {
-                font-size: 0.8rem;
-            }
-
-            .week-table th,
-            .week-table td {
-                padding: 0.25rem;
-            }
-
-            .time-input {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .time-input input {
-                width: 100%;
-                margin-bottom: 0.25rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 1.5rem;
-            }
-
-            .card-header h2 {
-                font-size: 1rem;
-            }
-
-            .input-group label,
-            .tab,
-            .calculate-btn {
-                font-size: 0.9rem;
-            }
-
-            .week-table {
-                font-size: 0.75rem;
-            }
+        .fade-enter-from, .fade-leave-to {
+            opacity: 0;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Calcolatrice Stipendio</h1>
+<body class="min-h-screen bg-gray-50 text-gray-900 font-sans">
+    <header class="bg-indigo-600 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold text-white">Calcolatrice Stipendio</h1>
         </div>
+    </header>
 
-        <div class="card">
-            <div class="card-header">
-                <h2>Parametri Base</h2>
-                <button onclick="toggleParametri()" class="toggle-btn">
-                    <i class="fas fa-cog"></i>
+    <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+            <!-- Base Parameters -->
+            <div class="p-6 border-b border-gray-200">
+                <button id="toggleBaseParams" class="mb-4 px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200 ease-in-out">
+                    Mostra Parametri Base
                 </button>
+                <div id="baseParamsContainer" class="hidden grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-4">
+                    <!-- Base parameters will be dynamically inserted here -->
+                </div>
             </div>
-            <div class="parametri-grid" id="parametriGrid">
-                <div class="input-group">
-                    <label for="stipendioBase">Stipendio base (€/ora)</label>
-                    <input type="number" id="stipendioBase" step="0.01" min="0">
+
+            <!-- Weekly Attendance -->
+            <div class="p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Registro Presenze</h2>
+                
+                <!-- Week Tabs -->
+                <div class="mb-6 overflow-x-auto">
+                    <div class="inline-flex rounded-md shadow-sm" role="group" id="weekTabs">
+                        <!-- Week tabs will be dynamically inserted here -->
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="indennitaGuida">Indennità di guida (€/giorno)</label>
-                    <input type="number" id="indennitaGuida" step="0.01" min="0">
-                </div>
-                <div class="input-group">
-                    <label for="extraMensa">Extra mensa (€)</label>
-                    <input type="number" id="extraMensa" step="0.01" min="0">
-                </div>
-                <div class="input-group">
-                    <label for="ff">FF (€)</label>
-                    <input type="number" id="ff" step="0.01" min="0">
-                </div>
-                <div class="input-group">
-                    <label for="ffCena">FF Cena (€)</label>
-                    <input type="number" id="ffCena" step="0.01" min="0">
-                </div>
-                <div class="input-group">
-                    <label for="reperibilitaFeriale">Reperibilità Feriale (€)</label>
-                    <input type="number" id="reperibilitaFeriale" step="0.01" min="0">
-                </div>
-                <div class="input-group">
-                    <label for="reperibilitaSabato">Reperibilità Sabato (€)</label>
-                    <input type="number" id="reperibilitaSabato" step="0.01" min="0">
-                </div>
-                <div class="input-group">
-                    <label for="reperibilitaFestivo">Reperibilità Festivo (€)</label>
-                    <input type="number" id="reperibilitaFestivo" step="0.01" min="0">
+
+                <div class="overflow-x-auto bg-gray-50 rounded-lg shadow">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giorno</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">P</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">G</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E/F</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">R</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">FC</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Straordinari</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceTable" class="bg-white divide-y divide-gray-200">
+                            <!-- Attendance rows will be dynamically inserted here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h2>Registro Presenze</h2>
-            </div>
-            <div class="tabs" id="weekTabs">
-                <button class="tab active" data-week="1">Settimana 1</button>
-                <button class="tab" data-week="2">Settimana 2</button>
-                <button class="tab" data-week="3">Settimana 3</button>
-                <button class="tab" data-week="4">Settimana 4</button>
-            </div>
-            <div id="weekTables"></div>
-        </div>
-
-        <button class="calculate-btn" onclick="calcolaStipendio()">
-            <i class="fas fa-calculator"></i> Calcola Stipendio
+        <button id="calculateSalary" class="mt-8 w-full sm:w-auto px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg transition-colors duration-200 ease-in-out">
+            Calcola Stipendio
         </button>
 
-        <div class="result" id="risultato"></div>
-    </div>
+        <div id="resultContainer" class="hidden mt-8 bg-white shadow-lg rounded-lg p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-2">Risultato</h2>
+            <p id="totalSalary" class="text-4xl font-bold text-indigo-600"></p>
+        </div>
+    </main>
 
     <script>
-        // Giorni della settimana
-        const giorni = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+        const baseParams = {
+            stipendioBase: { label: 'Stipendio base (€/ora)', value: 0 },
+            indennitaGuida: { label: 'Indennità di guida (€/giorno)', value: 0 },
+            extraMensa: { label: 'Extra mensa (€)', value: 0 },
+            ff: { label: 'FF (€)', value: 0 },
+            ffCena: { label: 'FF Cena (€)', value: 0 },
+            reperibilitaFeriale: { label: 'Reperibilità Feriale (€)', value: 0 },
+            reperibilitaSabato: { label: 'Reperibilità Sabato (€)', value: 0 },
+            reperibilitaFestivo: { label: 'Reperibilità Festivo (€)', value: 0 },
+        };
 
-        // Funzione per creare la tabella della settimana
-        function creaTabellaSettimana(settimana) {
-            const table = document.createElement('table');
-            table.className = 'week-table';
-            table.id = `week${settimana}`;
-            table.style.display = settimana === 1 ? 'table' : 'none';
+        let selectedWeek = 1;
+        const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+        let attendance = Array(28).fill().map(() => ({
+            presence: false,
+            driving: false,
+            extraFF: '0',
+            onCall: false,
+            ffDinner: false,
+            overtime: { 
+                day: { hours: 0, minutes: 0 }, 
+                night: { hours: 0, minutes: 0 }, 
+                holiday: { hours: 0, minutes: 0 } 
+            }
+        }));
 
-            // Header della tabella
-            const thead = document.createElement('thead');
-            thead.innerHTML = `
-                <tr>
-                    <th>Giorno</th>
-                    <th>P</th>
-                    <th>G</th>
-                    <th>E/F</th>
-                    <th>R</th>
-                    <th>FC</th>
-                    <th>Straordinari</th>
-                </tr>
-            `;
-            table.appendChild(thead);
+        function initializeBaseParams() {
+            const container = document.getElementById('baseParamsContainer');
+            for (const [key, param] of Object.entries(baseParams)) {
+                const div = document.createElement('div');
+                div.className = 'bg-gray-50 p-4 rounded-lg';
+                div.innerHTML = `
+                    <label for="${key}" class="block text-sm font-medium text-gray-700 mb-1">${param.label}</label>
+                    <input
+                        id="${key}"
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value="${param.value}"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    >
+                `;
+                container.appendChild(div);
+            }
+        }
 
-            // Corpo della tabella
-            const tbody = document.createElement('tbody');
-            giorni.forEach((giorno, index) => {
-                const row = document.createElement('tr');
-                const dayIndex = (settimana - 1) * 7 + index;
-                row.innerHTML = `
-                    <td>${giorno}</td>
-                    <td>
-                        <div class="checkbox-wrapper">
-                            <input type="checkbox" class="presenza" data-day="${dayIndex}">
-                        </div>
+        function initializeWeekTabs() {
+            const container = document.getElementById('weekTabs');
+            for (let week = 1; week <= 4; week++) {
+                const button = document.createElement('button');
+                button.textContent = `Settimana ${week}`;
+                button.className = `px-4 py-2 text-sm font-medium ${
+                    week === 1 ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'
+                } ${week === 1 ? 'rounded-l-lg' : ''} ${week === 4 ? 'rounded-r-lg' : ''} border border-gray-200`;
+                button.onclick = () => selectWeek(week);
+                container.appendChild(button);
+            }
+        }
+
+        function selectWeek(week) {
+            selectedWeek = week;
+            document.querySelectorAll('#weekTabs button').forEach((btn, index) => {
+                btn.className = btn.className.replace(
+                    index + 1 === week ? 'bg-white text-gray-700' : 'bg-indigo-600 text-white',
+                    index + 1 === week ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700'
+                );
+            });
+            renderAttendanceTable();
+        }
+
+        function renderAttendanceTable() {
+            const tbody = document.getElementById('attendanceTable');
+            tbody.innerHTML = '';
+            daysOfWeek.forEach((day, index) => {
+                const tr = document.createElement('tr');
+                tr.className = index % 2 === 0 ? 'bg-gray-50' : 'bg-white';
+                tr.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${day}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <input type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" data-index="${getDayIndex(index)}" data-field="presence">
                     </td>
-                    <td>
-                        <div class="checkbox-wrapper">
-                            <input type="checkbox" class="guida" data-day="${dayIndex}">
-                        </div>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <input type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" data-index="${getDayIndex(index)}" data-field="driving">
                     </td>
-                    <td>
-                        <select class="extraFF" data-day="${dayIndex}">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <select class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" data-index="${getDayIndex(index)}" data-field="extraFF">
                             <option value="0">-</option>
                             <option value="extraMensa">EM</option>
                             <option value="ff">FF</option>
                         </select>
                     </td>
-                    <td>
-                        <select class="reperibilita" data-day="${dayIndex}">
-                            <option value="0">-</option>
-                            <option value="feriale">F</option>
-                            <option value="sabato">S</option>
-                            <option value="festivo">D</option>
-                        </select>
-                    </td>
-                    <td>
-                        <div class="checkbox-wrapper">
-                            <input type="checkbox" class="ffCena" data-day="${dayIndex}">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <div class="flex items-center space-x-2">
+                            <input type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" data-index="${getDayIndex(index)}" data-field="onCall">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">${getOnCallType(index)}</span>
                         </div>
                     </td>
-                    <td>
-                        <div class="time-input">
-                            <input type="number" class="straordinarioDiurnoOre" min="0" max="23" value="0" data-day="${dayIndex}" placeholder="D">
-                            <input type="number" class="straordinarioDiurnoMinuti" min="0" max="59" value="0" data-day="${dayIndex}" placeholder="m">
-                            <input type="number" class="straordinarioNotturnoOre" min="0" max="23" value="0" data-day="${dayIndex}" placeholder="N">
-                            <input type="number" class="straordinarioNotturnoMinuti" min="0" max="59" value="0" data-day="${dayIndex}" placeholder="m">
-                            <input type="number" class="straordinarioFestivoOre" min="0" max="23" value="0" data-day="${dayIndex}" placeholder="F">
-                            <input type="number" class="straordinarioFestivoMinuti" min="0" max="59" value="0" data-day="${dayIndex}" placeholder="m">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <input type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" data-index="${getDayIndex(index)}" data-field="ffDinner">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <div class="grid grid-cols-3 gap-2">
+                            ${['day', 'night', 'holiday'].map(type => `
+                                <div class="flex flex-col">
+                                    <label class="text-xs text-gray-500 mb-1">${{'day': 'D', 'night': 'N', 'holiday': 'F'}[type]}</label>
+                                    <div class="flex items-center space-x-1">
+                                        <input 
+                                            type="number" 
+                                            min="0" 
+                                            max="23" 
+                                            class="w-12 p-1 text-sm border-gray-300 rounded-md"
+                                            placeholder="H"
+                                            data-index="${getDayIndex(index)}"
+                                            data-field="overtime.${type}.hours"
+                                        >
+                                        <span>:</span>
+                                        <input 
+                                            type="number" 
+                                            min="0" 
+                                            max="59" 
+                                            class="w-12 p-1 text-sm border-gray-300 rounded-md"
+                                            placeholder="M"
+                                            data-index="${getDayIndex(index)}"
+                                            data-field="overtime.${type}.minutes"
+                                        >
+                                    </div>
+                                </div>
+                            `).join('')}
                         </div>
                     </td>
                 `;
-                tbody.appendChild(row);
+                tbody.appendChild(tr);
             });
-            
-            table.appendChild(tbody);
-            return table;
+            updateAttendanceInputs();
         }
 
-        // Inizializzazione delle tabelle
-        const weekTables = document.getElementById('weekTables');
-        for (let i = 1; i <= 4; i++) {
-            weekTables.appendChild(creaTabellaSettimana(i));
+        function updateAttendanceInputs() {
+            document.querySelectorAll('#attendanceTable input, #attendanceTable select').forEach(input => {
+                const index = parseInt(input.dataset.index);
+                const field = input.dataset.field;
+                if (field.includes('.')) {
+                    const [parent, child, grandchild] = field.split('.');
+                    input.value = attendance[index][parent][child][grandchild];
+                } else {
+                    input.checked = attendance[index][field];
+                    if (field === 'onCall') {
+                        updateOnCallType(index);
+                    }
+                }
+                input.onchange = (e) => updateAttendance(e.target);
+            });
         }
 
-        // Gestione dei tab
-        document.getElementById('weekTabs').addEventListener('click', (e) => {
-            if (e.target.classList.contains('tab')) {
-                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-                e.target.classList.add('active');
-                document.querySelectorAll('.week-table').forEach(table => table.style.display = 'none');
-                const weekNum = e.target.getAttribute('data-week');
-                document.getElementById(`week${weekNum}`).style.display = 'table';
-            }
-        });
-
-        // Funzione per mostrare/nascondere i parametri
-        function toggleParametri() {
-            const parametriGrid = document.getElementById('parametriGrid');
-            parametriGrid.classList.toggle('show');
-        }
-
-        // Funzione per salvare i dati
-        function salvaDati() {
-            const dati = {
-                parametri: {
-                    stipendioBase: document.getElementById('stipendioBase').value,
-                    indennitaGuida: document.getElementById('indennitaGuida').value,
-                    extraMensa: document.getElementById('extraMensa').value,
-                    ff: document.getElementById('ff').value,
-                    ffCena: document.getElementById('ffCena').value,
-                    reperibilitaFeriale: document.getElementById('reperibilitaFeriale').value,
-                    reperibilitaSabato: document.getElementById('reperibilitaSabato').value,
-                    reperibilitaFestivo: document.getElementById('reperibilitaFestivo').value
-                },
-                giorni: []
-            };
-
-            // Salva i dati per ogni giorno
-            for (let i = 0; i < 28; i++) {
-                const giorno = {
-                    presenza: document.querySelector(`.presenza[data-day="${i}"]`).checked,
-                    guida: document.querySelector(`.guida[data-day="${i}"]`).checked,
-                    extraFF: document.querySelector(`.extraFF[data-day="${i}"]`).value,
-                    reperibilita: document.querySelector(`.reperibilita[data-day="${i}"]`).value,
-                    ffCena: document.querySelector(`.ffCena[data-day="${i}"]`).checked,
-                    straordinarioDiurnoOre: document.querySelector(`.straordinarioDiurnoOre[data-day="${i}"]`).value,
-                    straordinarioDiurnoMinuti: document.querySelector(`.straordinarioDiurnoMinuti[data-day="${i}"]`).value,
-                    straordinarioNotturnoOre: document.querySelector(`.straordinarioNotturnoOre[data-day="${i}"]`).value,
-                    straordinarioNotturnoMinuti: document.querySelector(`.straordinarioNotturnoMinuti[data-day="${i}"]`).value,
-                    straordinarioFestivoOre: document.querySelector(`.straordinarioFestivoOre[data-day="${i}"]`).value,
-                    straordinarioFestivoMinuti: document.querySelector(`.straordinarioFestivoMinuti[data-day="${i}"]`).value
-                };
-                dati.giorni.push(giorno);
-            }
-
-            localStorage.setItem('calcolatriceStipendio', JSON.stringify(dati));
-        }
-
-        // Funzione per caricare i dati salvati
-        function caricaDati() {
-            const datiSalvati = localStorage.getItem('calcolatriceStipendio');
-            if (datiSalvati) {
-                const dati = JSON.parse(datiSalvati);
-                
-                // Carica i parametri
-                document.getElementById('stipendioBase').value = dati.parametri.stipendioBase;
-                document.getElementById('indennitaGuida').value = dati.parametri.indennitaGuida;
-                document.getElementById('extraMensa').value = dati.parametri.extraMensa;
-                document.getElementById('ff').value = dati.parametri.ff;
-                document.getElementById('ffCena').value = dati.parametri.ffCena;
-                document.getElementById('reperibilitaFeriale').value = dati.parametri.reperibilitaFeriale;
-                document.getElementById('reperibilitaSabato').value = dati.parametri.reperibilitaSabato;
-                document.getElementById('reperibilitaFestivo').value = dati.parametri.reperibilitaFestivo;
-
-                // Carica i dati dei giorni
-                dati.giorni.forEach((giorno, index) => {
-                    document.querySelector(`.presenza[data-day="${index}"]`).checked = giorno.presenza;
-                    document.querySelector(`.guida[data-day="${index}"]`).checked = giorno.guida;
-                    document.querySelector(`.extraFF[data-day="${index}"]`).value = giorno.extraFF;
-                    document.querySelector(`.reperibilita[data-day="${index}"]`).value = giorno.reperibilita;
-                    document.querySelector(`.ffCena[data-day="${index}"]`).checked = giorno.ffCena;
-                    document.querySelector(`.straordinarioDiurnoOre[data-day="${index}"]`).value = giorno.straordinarioDiurnoOre;
-                    document.querySelector(`.straordinarioDiurnoMinuti[data-day="${index}"]`).value = giorno.straordinarioDiurnoMinuti;
-                    document.querySelector(`.straordinarioNotturnoOre[data-day="${index}"]`).value = giorno.straordinarioNotturnoOre;
-                    document.querySelector(`.straordinarioNotturnoMinuti[data-day="${index}"]`).value = giorno.straordinarioNotturnoMinuti;
-                    document.querySelector(`.straordinarioFestivoOre[data-day="${index}"]`).value = giorno.straordinarioFestivoOre;
-                    document.querySelector(`.straordinarioFestivoMinuti[data-day="${index}"]`).value = giorno.straordinarioFestivoMinuti;
-                });
+        function updateAttendance(input) {
+            const index = parseInt(input.dataset.index);
+            const field = input.dataset.field;
+            if (field.includes('.')) {
+                const [parent, child, grandchild] = field.split('.');
+                attendance[index][parent][child][grandchild] = input.value;
+            } else {
+                attendance[index][field] = input.type === 'checkbox' ? input.checked : input.value;
+                if (field === 'onCall') {
+                    updateOnCallType(index);
+                }
             }
         }
 
-        // Funzione per calcolare lo stipendio
-        function calcolaStipendio() {
-            let totale = 0;
-            const stipendioBase = parseFloat(document.getElementById('stipendioBase').value) || 0;
-            const indennitaGuida = parseFloat(document.getElementById('indennitaGuida').value) || 0;
-            const extraMensaVal = parseFloat(document.getElementById('extraMensa').value) || 0;
-            const ffVal = parseFloat(document.getElementById('ff').value) || 0;
-            const ffCenaVal = parseFloat(document.getElementById('ffCena').value) || 0;
-            const reperibilitaFerialeVal = parseFloat(document.getElementById('reperibilitaFeriale').value) || 0;
-            const reperibilitaSabatoVal = parseFloat(document.getElementById('reperibilitaSabato').value) || 0;
-            const reperibilitaFestivoVal = parseFloat(document.getElementById('reperibilitaFestivo').value) || 0;
+        function getDayIndex(dayIndex) {
+            return (selectedWeek - 1) * 7 + dayIndex;
+        }
 
-            // Calcola per ogni giorno
-            for (let i = 0; i < 28; i++) {
-                const presenza = document.querySelector(`.presenza[data-day="${i}"]`).checked;
-                const guida = document.querySelector(`.guida[data-day="${i}"]`).checked;
-                const extraFF = document.querySelector(`.extraFF[data-day="${i}"]`).value;
-                const reperibilita = document.querySelector(`.reperibilita[data-day="${i}"]`).value;
-                const ffCena = document.querySelector(`.ffCena[data-day="${i}"]`).checked;
-                const straordinarioDiurnoOre = parseInt(document.querySelector(`.straordinarioDiurnoOre[data-day="${i}"]`).value) || 0;
-                const straordinarioDiurnoMinuti = parseInt(document.querySelector(`.straordinarioDiurnoMinuti[data-day="${i}"]`).value) || 0;
-                const straordinarioNotturnoOre = parseInt(document.querySelector(`.straordinarioNotturnoOre[data-day="${i}"]`).value) || 0;
-                const straordinarioNotturnoMinuti = parseInt(document.querySelector(`.straordinarioNotturnoMinuti[data-day="${i}"]`).value) || 0;
-                const straordinarioFestivoOre = parseInt(document.querySelector(`.straordinarioFestivoOre[data-day="${i}"]`).value) || 0;
-                const straordinarioFestivoMinuti = parseInt(document.querySelector(`.straordinarioFestivoMinuti[data-day="${i}"]`).value) || 0;
+        function updateOnCallType(index) {
+            const span = document.querySelector(`#attendanceTable tr:nth-child(${index % 7 + 1}) td:nth-child(5) span`);
+            const type = getOnCallType(index % 7);
+            span.textContent = type;
+            span.className = span.className.replace(/bg-\w+-100 text-\w+-800/, 
+                type === 'F' ? 'bg-green-100 text-green-800' :
+                type === 'S' ? 'bg-yellow-100 text-yellow-800' :
+                'bg-red-100 text-red-800'
+            );
+        }
 
-                if (presenza) totale += stipendioBase * 7.6; // Giornata lavorativa standard (7 ore e 36 minuti)
-                if (guida) totale += indennitaGuida;
-                if (extraFF === 'extraMensa') totale += extraMensaVal;
-                if (extraFF === 'ff') totale += ffVal;
-                if (ffCena) totale += ffCenaVal;
+        function getOnCallType(index) {
+            const dayOfWeek = index % 7;
+            if (dayOfWeek ===   5) return 'S';
+            if (dayOfWeek === 6) return 'D';
+            return 'F';
+        }
 
-                // Calcola reperibilità
-                switch (reperibilita) {
-                    case 'feriale':
-                        totale += reperibilitaFerialeVal;
-                        break;
-                    case 'sabato':
-                        totale += reperibilitaSabatoVal;
-                        break;
-                    case 'festivo':
-                        totale += reperibilitaFestivoVal;
-                        break;
+        function calculateSalary() {
+            let total = 0;
+            attendance.forEach((day, index) => {
+                if (day.presence) total += parseFloat(document.getElementById('stipendioBase').value) * 7.6;
+                if (day.driving) total += parseFloat(document.getElementById('indennitaGuida').value);
+                if (day.extraFF === 'extraMensa') total += parseFloat(document.getElementById('extraMensa').value);
+                if (day.extraFF === 'ff') total += parseFloat(document.getElementById('ff').value);
+                if (day.ffDinner) total += parseFloat(document.getElementById('ffCena').value);
+
+                if (day.onCall) {
+                    const onCallType = getOnCallType(index % 7);
+                    switch (onCallType) {
+                        case 'F': total += parseFloat(document.getElementById('reperibilitaFeriale').value); break;
+                        case 'S': total += parseFloat(document.getElementById('reperibilitaSabato').value); break;
+                        case 'D': total += parseFloat(document.getElementById('reperibilitaFestivo').value); break;
+                    }
                 }
 
-                // Calcola straordinari
-                const straordinarioDiurno = straordinarioDiurnoOre + (straordinarioDiurnoMinuti / 60);
-                const straordinarioNotturno = straordinarioNotturnoOre + (straordinarioNotturnoMinuti / 60);
-                const straordinarioFestivo = straordinarioFestivoOre + (straordinarioFestivoMinuti / 60);
+                Object.entries(day.overtime).forEach(([type, time]) => {
+                    const hours = parseFloat(time.hours) + parseFloat(time.minutes) / 60;
+                    const baseRate = parseFloat(document.getElementById('stipendioBase').value);
+                    switch (type) {
+                        case 'day': total += hours * baseRate * 1.22; break;
+                        case 'night': total += hours * baseRate * 1.5; break;
+                        case 'holiday': total += hours * baseRate * 1.4; break;
+                    }
+                });
+            });
 
-                totale += straordinarioDiurno * stipendioBase * 1.22;  // Maggiorazione 22%
-                totale += straordinarioNotturno * stipendioBase * 1.5; // Maggiorazione 50%
-                totale += straordinarioFestivo * stipendioBase * 1.4;  // Maggiorazione 40%
-            }
-
-            // Mostra il risultato formattato
-            document.getElementById('risultato').innerHTML = `
-                <i class="fas fa-euro-sign"></i> 
-                Stipendio Totale: ${totale.toLocaleString('it-IT', {
-                    style: 'currency',
-                    currency: 'EUR'
-                })}
-            `;
-
-            // Salva i dati dopo il calcolo
-            salvaDati();
+            document.getElementById('totalSalary').textContent = `€ ${total.toFixed(2)}`;
+            document.getElementById('resultContainer').classList.remove('hidden');
         }
 
-        // Aggiungi event listener per il salvataggio automatico
-        document.querySelectorAll('input, select').forEach(element => {
-            element.addEventListener('change', salvaDati);
-        });
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeBaseParams();
+            initializeWeekTabs();
+            renderAttendanceTable();
 
-        // Carica i dati salvati all'avvio
-        document.addEventListener('DOMContentLoaded', caricaDati);
+            document.getElementById('toggleBaseParams').addEventListener('click', () => {
+                const container = document.getElementById('baseParamsContainer');
+                const button = document.getElementById('toggleBaseParams');
+                if (container.classList.contains('hidden')) {
+                    container.classList.remove('hidden');
+                    button.textContent = 'Nascondi Parametri Base';
+                } else {
+                    container.classList.add('hidden');
+                    button.textContent = 'Mostra Parametri Base';
+                }
+            });
+
+            document.getElementById('calculateSalary').addEventListener('click', calculateSalary);
+        });
     </script>
 </body>
 </html>
