@@ -65,9 +65,14 @@
             </div>
         </div>
 
-        <button id="calculateSalary" class="mt-8 w-full sm:w-auto px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg transition-colors duration-200 ease-in-out">
-            Calcola Stipendio
-        </button>
+        <div class="mt-8 flex justify-between">
+            <button id="saveData" class="px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 shadow-lg transition-colors duration-200 ease-in-out">
+                Salva Dati
+            </button>
+            <button id="calculateSalary" class="px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg transition-colors duration-200 ease-in-out">
+                Calcola Stipendio
+            </button>
+        </div>
 
         <div id="resultContainer" class="hidden mt-8 bg-white shadow-lg rounded-lg p-6">
             <h2 class="text-lg font-medium text-gray-900 mb-2">Risultato</h2>
@@ -220,7 +225,11 @@
                     const [parent, child, grandchild] = field.split('.');
                     input.value = attendance[index][parent][child][grandchild];
                 } else {
-                    input.checked = attendance[index][field];
+                    if (input.type === 'checkbox') {
+                        input.checked = attendance[index][field];
+                    } else {
+                        input.value = attendance[index][field];
+                    }
                     if (field === 'onCall') {
                         updateOnCallType(index);
                     }
@@ -237,7 +246,7 @@
                 attendance[index][parent][child][grandchild] = input.value;
             } else {
                 attendance[index][field] = input.type === 'checkbox' ? input.checked : input.value;
-                if (field === 'onCall') {
+                if (field === 'onCall')    {
                     updateOnCallType(index);
                 }
             }
@@ -260,7 +269,7 @@
 
         function getOnCallType(index) {
             const dayOfWeek = index % 7;
-            if (dayOfWeek ===   5) return 'S';
+            if (dayOfWeek === 5) return 'S';
             if (dayOfWeek === 6) return 'D';
             return 'F';
         }
@@ -298,9 +307,42 @@
             document.getElementById('resultContainer').classList.remove('hidden');
         }
 
+        function saveData() {
+            const data = {
+                baseParams: {},
+                attendance: attendance
+            };
+
+            // Save base parameters
+            for (const key in baseParams) {
+                data.baseParams[key] = parseFloat(document.getElementById(key).value);
+            }
+
+            // Save to localStorage
+            localStorage.setItem('salaryCalculatorData', JSON.stringify(data));
+            alert('Dati salvati con successo!');
+        }
+
+        function loadData() {
+            const savedData = localStorage.getItem('salaryCalculatorData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+
+                // Load base parameters
+                for (const key in data.baseParams) {
+                    document.getElementById(key).value = data.baseParams[key];
+                }
+
+                // Load attendance data
+                attendance = data.attendance;
+                renderAttendanceTable();
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             initializeBaseParams();
             initializeWeekTabs();
+            loadData(); // Load saved data
             renderAttendanceTable();
 
             document.getElementById('toggleBaseParams').addEventListener('click', () => {
@@ -316,6 +358,7 @@
             });
 
             document.getElementById('calculateSalary').addEventListener('click', calculateSalary);
+            document.getElementById('saveData').addEventListener('click', saveData);
         });
     </script>
 </body>
