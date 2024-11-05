@@ -65,14 +65,9 @@
             </div>
         </div>
 
-        <div class="mt-8 flex justify-between">
-            <button id="saveData" class="px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 shadow-lg transition-colors duration-200 ease-in-out">
-                Salva Dati
-            </button>
-            <button id="calculateSalary" class="px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg transition-colors duration-200 ease-in-out">
-                Calcola Stipendio
-            </button>
-        </div>
+        <button id="calculateSalary" class="mt-8 w-full sm:w-auto px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg transition-colors duration-200 ease-in-out">
+            Calcola Stipendio
+        </button>
 
         <div id="resultContainer" class="hidden mt-8 bg-white shadow-lg rounded-lg p-6">
             <h2 class="text-lg font-medium text-gray-900 mb-2">Risultato</h2>
@@ -124,6 +119,7 @@
                     >
                 `;
                 container.appendChild(div);
+                document.getElementById(key).addEventListener('input', autoSave);
             }
         }
 
@@ -234,7 +230,10 @@
                         updateOnCallType(index);
                     }
                 }
-                input.onchange = (e) => updateAttendance(e.target);
+                input.addEventListener('change', (e) => {
+                    updateAttendance(e.target);
+                    autoSave();
+                });
             });
         }
 
@@ -246,7 +245,7 @@
                 attendance[index][parent][child][grandchild] = input.value;
             } else {
                 attendance[index][field] = input.type === 'checkbox' ? input.checked : input.value;
-                if (field === 'onCall')    {
+                if (field === 'onCall') {
                     updateOnCallType(index);
                 }
             }
@@ -257,7 +256,7 @@
         }
 
         function updateOnCallType(index) {
-            const span = document.querySelector(`#attendanceTable tr:nth-child(${index % 7 + 1}) td:nth-child(5) span`);
+            const span =   document.querySelector(`#attendanceTable tr:nth-child(${index % 7 + 1}) td:nth-child(5) span`);
             const type = getOnCallType(index % 7);
             span.textContent = type;
             span.className = span.className.replace(/bg-\w+-100 text-\w+-800/, 
@@ -307,7 +306,7 @@
             document.getElementById('resultContainer').classList.remove('hidden');
         }
 
-        function saveData() {
+        function autoSave() {
             const data = {
                 baseParams: {},
                 attendance: attendance
@@ -320,7 +319,6 @@
 
             // Save to localStorage
             localStorage.setItem('salaryCalculatorData', JSON.stringify(data));
-            alert('Dati salvati con successo!');
         }
 
         function loadData() {
@@ -358,7 +356,6 @@
             });
 
             document.getElementById('calculateSalary').addEventListener('click', calculateSalary);
-            document.getElementById('saveData').addEventListener('click', saveData);
         });
     </script>
 </body>
